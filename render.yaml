@@ -36,6 +36,10 @@ services:
     publishDir: dist
     envVars:
       - key: VITE_API_URL
-        value: /api
+        fromService:
+          name: nebula-backend
+          type: web
+          property: url
+          path: /api
       - key: VITE_APP_NAME
         value: Nebula AI Studio
