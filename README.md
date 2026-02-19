@@ -1,12 +1,6 @@
 # 🌌 Nebula AI Studio
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Vedantd2003/Nebula-AI-)
-
 A full-stack AI-powered SaaS platform for content generation, document analysis, and creative tools.
-
-## ⭐ Star us on GitHub
-
-If you find this project useful, please star us on GitHub! It helps the project grow: https://github.com/Vedantd2003/Nebula-AI-
 
 ## ✨ Features
 
@@ -53,13 +47,20 @@ If you find this project useful, please star us on GitHub! It helps the project 
 - **GitHub Actions** - CI/CD
 - **ESLint & Prettier** - Code quality
 
+## 📋 Prerequisites
+
+- Node.js 18+ and npm
+- MongoDB 6+
+- Docker & Docker Compose (optional)
+- Anthropic API Key
+
 ## 🚀 Quick Start
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Vedantd2003/Nebula-AI-.git
-cd Nebula-AI-
+git clone https://github.com/yourusername/nebula-ai-studio.git
+cd nebula-ai-studio
 ```
 
 ### 2. Install Dependencies
@@ -162,51 +163,6 @@ pm2 start ecosystem.config.js
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:5000/api
 - **API Docs**: http://localhost:5000/api-docs
-
-## 🚀 Deploy to Render.com
-
-### Option 1: One-Click Deploy
-
-Click the button below to deploy directly to Render:
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Vedantd2003/Nebula-AI-)
-
-### Option 2: Manual Deploy
-
-#### Backend Service (Web Service)
-
-1. Create a new **Web Service** on Render
-2. Connect your GitHub repository
-3. Configure:
-   - **Name**: nebula-backend
-   - **Runtime**: Node
-   - **Build Command**: `npm install`
-   - **Start Command**: `node server.js`
-   - **Environment Variables**:
-     - `NODE_ENV=production`
-     - `PORT=5000`
-     - `MONGODB_URI` (use Render's managed MongoDB or Atlas)
-     - `JWT_SECRET` (generate a secure random string)
-     - `JWT_REFRESH_SECRET` (generate a secure random string)
-     - `ANTHROPIC_API_KEY` (your Anthropic API key)
-     - `FRONTEND_URL` (your Render frontend URL)
-
-#### Frontend Service (Static Site)
-
-1. Create a new **Static Site** on Render
-2. Connect your GitHub repository
-3. Configure:
-   - **Name**: nebula-frontend
-   - **Build Command**: `npm install && npm run build`
-   - **Publish Directory**: `dist`
-   - **Environment Variables**:
-     - `VITE_API_URL` (your Render backend URL, e.g., `https://nebula-backend.onrender.com/api`)
-
-### Database Setup
-
-1. Create a **MongoDB** database on Render (or use MongoDB Atlas)
-2. Get the connection string
-3. Add it to your backend's environment variables as `MONGODB_URI`
 
 ## 🐳 Docker Deployment
 
@@ -325,6 +281,32 @@ npm run build
 # - backend/dist
 ```
 
+## 🚢 Deployment
+
+### Using PM2
+
+```bash
+cd backend
+pm2 start ecosystem.config.js --env production
+pm2 save
+pm2 startup
+```
+
+### Using Docker
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+### Environment Variables for Production
+
+- Set `NODE_ENV=production`
+- Use strong JWT secrets
+- Configure proper CORS origins
+- Set up SSL certificates
+- Use production database
+- Configure monitoring tools
+
 ## 🔒 Security Features
 
 - JWT authentication with refresh tokens
@@ -343,7 +325,7 @@ npm run build
 - Error tracking
 - Performance monitoring
 - Usage analytics
-- Health check endpoint: `GET /health`
+- Health check endpoint: `GET /api/health`
 
 ## 🤝 Contributing
 
