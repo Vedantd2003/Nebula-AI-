@@ -2,8 +2,9 @@ services:
   - type: web
     name: nebula-backend
     runtime: node
-    buildCommand: npm install
-    startCommand: node server.js
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
+    rootDir: backend
     envVars:
       - key: NODE_ENV
         value: production
@@ -32,8 +33,9 @@ services:
   - type: web
     name: nebula-frontend
     runtime: static
-    buildCommand: npm install && npm run build
-    publishDir: dist
+    buildCommand: cd frontend && npm install && npm run build
+    publishDir: frontend/dist
+    rootDir: frontend
     envVars:
       - key: VITE_API_URL
         fromService:
