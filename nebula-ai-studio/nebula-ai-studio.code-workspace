@@ -1,0 +1,130 @@
+{
+  "folders": [
+    {
+      "name": "🌌 Nebula AI Studio",
+      "path": "."
+    },
+    {
+      "name": "Backend",
+      "path": "backend"
+    },
+    {
+      "name": "Frontend",
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.git": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true
+    },
+    "files.associations": {
+      "*.css": "tailwindcss"
+    },
+    "tailwindCSS.experimental.classRegex": [
+      ["className\\s*=\\s*['\"`]([^'\"`]*)['\"`]", "['\"`]([^'\"`]*)['\"`]"]
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "dsznajder.es7-react-js-snippets",
+      "mongodb.mongodb-vscode",
+      "ms-vscode.vscode-node-azure-pack",
+      "christian-kohler.npm-intellisense",
+      "wix.vscode-import-cost"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Backend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        "cwd": "${workspaceFolder}/backend",
+        "console": "integratedTerminal",
+        "skipFiles": ["<node_internals>/**"]
+      },
+      {
+        "name": "Frontend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        "cwd": "${workspaceFolder}/frontend",
+        "console": "integratedTerminal"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Full Stack",
+        "configurations": ["Backend", "Frontend"],
+        "presentation": {
+          "hidden": false,
+          "group": "development",
+          "order": 1
+        }
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Install All Dependencies",
+        "type": "shell",
+        "command": "cd backend && npm install && cd ../frontend && npm install",
+        "problemMatcher": []
+      },
+      {
+        "label": "Start Backend",
+        "type": "npm",
+        "script": "dev",
+        "path": "backend/",
+        "problemMatcher": []
+      },
+      {
+        "label": "Start Frontend",
+        "type": "npm",
+        "script": "dev",
+        "path": "frontend/",
+        "problemMatcher": []
+      },
+      {
+        "label": "Build Frontend",
+        "type": "npm",
+        "script": "build",
+        "path": "frontend/",
+        "problemMatcher": []
+      },
+      {
+        "label": "Docker Compose Up",
+        "type": "shell",
+        "command": "docker-compose up -d",
+        "problemMatcher": []
+      },
+      {
+        "label": "Docker Compose Down",
+        "type": "shell",
+        "command": "docker-compose down",
+        "problemMatcher": []
+      }
+    ]
+  }
+}

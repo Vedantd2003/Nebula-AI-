@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: nebula-backend
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: nebula-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        fromService:
+          name: nebula-frontend
+          type: web
+          property: url
+    databases:
+      - name: nebula-db
+        databaseName: nebula-ai
+        user: nebula_user
+
+  - type: web
+    name: nebula-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: nebula-backend
+          type: web
+          property: url
+          path: /api
