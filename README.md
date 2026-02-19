@@ -4,7 +4,7 @@ A full-stack AI-powered SaaS platform for content generation, document analysis,
 
 ## ✨ Features
 
-- 🤖 **AI Text Generation** - Generate content with Claude AI
+- 🤖 **AI Text Generation** - Generate content with Google Gemini AI
 - 📄 **Document Analysis** - Extract insights from PDFs and documents
 - 🎨 **Image Generation** - Create AI-powered images
 - 📝 **Smart Summarization** - Summarize long documents instantly
@@ -33,7 +33,7 @@ A full-stack AI-powered SaaS platform for content generation, document analysis,
 - **Mongoose** - ODM
 - **JWT** - Authentication
 - **bcrypt** - Password hashing
-- **Anthropic SDK** - Claude AI integration
+- **Google Gemini AI** - AI integration
 - **Multer** - File uploads
 - **Rate Limiting** - API protection
 - **Helmet** - Security headers
@@ -52,7 +52,7 @@ A full-stack AI-powered SaaS platform for content generation, document analysis,
 - Node.js 18+ and npm
 - MongoDB 6+
 - Docker & Docker Compose (optional)
-- Anthropic API Key
+- Google Gemini API Key
 
 ## 🚀 Quick Start
 
@@ -93,8 +93,8 @@ JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-this-in-production
 JWT_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
 
-# Anthropic AI
-ANTHROPIC_API_KEY=your-anthropic-api-key-here
+# Google Gemini AI
+GEMINI_API_KEY=your-gemini-api-key-here
 
 # Rate Limiting
 RATE_LIMIT_WINDOW_MS=900000
@@ -341,7 +341,7 @@ MIT License - see LICENSE file for details
 
 ## 🙏 Acknowledgments
 
-- Anthropic for Claude AI API
+- Google for Gemini AI API
 - GSAP for amazing animations
 - The open-source community
 
@@ -353,4 +353,4 @@ MIT License - see LICENSE file for details
 
 ---
 
-Built with ❤️ using Claude AI
+Built with ❤️ using Google Gemini AI

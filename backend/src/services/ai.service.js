@@ -1,19 +1,17 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import logger from "../utils/logger.js";
 
 class AIService {
   constructor() {
-    if (!process.env.OPENROUTER_API_KEY) {
-      throw new Error("OPENROUTER_API_KEY is missing in .env");
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is missing in .env");
     }
 
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENROUTER_API_KEY,
-      baseURL: "https://openrouter.ai/api/v1",
-    });
+    this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    this.defaultModel = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   }
 
   // ===============================
@@ -22,29 +20,31 @@ class AIService {
   async generateText(prompt, options = {}) {
     try {
       const {
-        model = "mistralai/mistral-7b-instruct",
+        model = "gemini-1.5-flash",
         maxTokens = 1000,
         temperature = 0.7,
         systemPrompt = "You are a helpful AI assistant."
       } = options;
 
-      const completion = await this.openai.chat.completions.create({
-        model,
-        temperature,
-        max_tokens: maxTokens,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: prompt }
-        ]
+      const genModel = this.genAI.getGenerativeModel({ model });
+
+      // Start chat with system prompt
+      const chat = genModel.startChat({
+        systemInstruction: systemPrompt,
+        generationConfig: {
+          maxOutputTokens: maxTokens,
+          temperature: temperature,
+        },
       });
 
-      const text = completion?.choices?.[0]?.message?.content || "";
+      const result = await chat.sendMessage(prompt);
+      const text = result.response.text();
 
       return {
         text,
         metadata: {
           model,
-          usage: completion.usage || {}
+          usage: result.response.usageMetadata || {}
         }
       };
 
@@ -128,27 +128,34 @@ class AIService {
   async chatCompletion(messages, options = {}) {
     try {
       const {
-        model = "mistralai/mistral-7b-instruct",
+        model = "gemini-1.5-flash",
         maxTokens = 1000,
         temperature = 0.7,
         systemPrompt = "You are a helpful AI assistant."
       } = options;
 
-      const completion = await this.openai.chat.completions.create({
-        model,
-        temperature,
-        max_tokens: maxTokens,
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages
-        ]
+      const genModel = this.genAI.getGenerativeModel({ model });
+
+      // Convert messages to Gemini format
+      const contents = messages.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }]
+      }));
+
+      const result = await genModel.generateContent({
+        contents,
+        generationConfig: {
+          maxOutputTokens: maxTokens,
+          temperature: temperature,
+        },
+        systemInstruction: systemPrompt
       });
 
       return {
-        response: completion?.choices?.[0]?.message?.content || "",
+        response: result.response.text(),
         metadata: {
           model,
-          usage: completion.usage || {}
+          usage: result.response.usageMetadata || {}
         }
       };
 
@@ -159,15 +166,12 @@ class AIService {
   }
 
   // ===============================
-  // 🔹 CREDIT CALCULATION (FIXED)
+  // 🔹 CREDIT CALCULATION
   // ===============================
   calculateCredits(usage) {
     if (!usage) return 1;
 
-    const totalTokens =
-      usage.total_tokens ||
-      (usage.prompt_tokens || 0) + (usage.completion_tokens || 0);
-
+    const totalTokens = usage.totalTokenCount || 0;
     // 1 credit per 1000 tokens (adjust if needed)
     return Math.max(1, Math.ceil(totalTokens / 1000));
   }
